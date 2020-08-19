@@ -11,8 +11,10 @@ A multi back stack android navigation</h2>
 
 MIT License
 
-Copyright (c) 2020 Abanoub Milad Nassief Hanna
-
+Copyright (c) 2020 Abanoub Milad Nassief Hanna\
+abanoubcs@gmail.com\
+[@Linkedin](https://www.linkedin.com/in/abanoubmilad/)\
+[@Github](https://github.com/abanoubmilad)
 
 ## How to add
 
