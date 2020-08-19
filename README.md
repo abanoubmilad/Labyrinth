@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="labyrinth.png" width="600">
+  <img src="readme_res/labyrinth.png" width="600">
 </p>
 
 <h1 align="center">
@@ -15,6 +15,15 @@ Copyright (c) 2020 Abanoub Milad Nassief Hanna\
 abanoubcs@gmail.com\
 [@Linkedin](https://www.linkedin.com/in/abanoubmilad/)\
 [@Github](https://github.com/abanoubmilad)
+
+
+
+<p align="center">
+  <img src="readme_res/screen_shot_0.png" width="150">
+  <img src="readme_res/screen_shot_1.png" width="150">
+  <img src="readme_res/screen_shot_2.png" width="150">
+</p>
+
 
 ## How to add
 
