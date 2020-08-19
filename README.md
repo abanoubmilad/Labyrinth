@@ -9,6 +9,12 @@ Labyrinth
 <h2 align="center">
 A multi back stack android navigation</h2>
 
+MIT License
+
+Copyright (c) 2020 Abanoub Milad Nassief Hanna
+
+
+## How to add
 
 Add to project level `build.gradle`
 
