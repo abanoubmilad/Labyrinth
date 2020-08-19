@@ -1,0 +1,2 @@
+include ':app', ':labyrinth'
+rootProject.name='Labyrinth'

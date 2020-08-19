@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home"
+        android:title="welcome" />
+    <item
+        android:id="@+id/list"
+        android:icon="@drawable/ic_list"
+        android:title="board" />
+    <item
+        android:id="@+id/form"
+        android:icon="@drawable/ic_feedback"
+        android:title="register" />
+</menu>

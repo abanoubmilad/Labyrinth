@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Labyrinth</string>
+    <string name="name">Name</string>
+    <string name="sign_up">next step</string>
+    <string name="profile_name_1">Ali Connors</string>
+    <string name="profile_image">Profile image</string>
+    <string name="user_points">10,000 pts</string>
+    <string name="rank">Rank</string>
+    <string name="rank_1">#1</string>
+    <string name="wins">Wins</string>
+    <string name="wins_amount">42</string>
+    <string name="losses">Losses</string>
+    <string name="losses_amount">03</string>
+    <string name="welcome">Welcome!</string>
+    <string name="title_home">Home</string>
+    <string name="title_register1">Register 1</string>
+    <string name="title_list">Leaderboard</string>
+    <string name="cd_home">Home</string>
+    <string name="cd_list">List</string>
+    <string name="cd_form">Form</string>
+</resources>
