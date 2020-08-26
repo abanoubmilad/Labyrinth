@@ -8,7 +8,7 @@ apply plugin: 'maven-publish'
 
 def libraryGroupId = 'com.github.abanoubmilad'
 def libraryArtifactId = 'labyrinth'
-def libraryVersion = '0.1'
+def libraryVersion = '0.2'
 
 android {
     compileSdkVersion 29

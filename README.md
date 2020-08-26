@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="readme_res/labyrinth.png" width="600">
+  <img src="readme_res/labyrinth.png" width="700">
 </p>
 
 <h1 align="center">
@@ -45,7 +45,7 @@ Add to app level `build.gradle`
 ```Groovy
     dependencies {
 
-        implementation 'com.github.abanoubmilad:labyrinth:0.1'
+        implementation 'com.github.abanoubmilad:labyrinth:0.2'
         
     }
 ```
@@ -62,7 +62,7 @@ class ExampleMultiNavActivity : AppCompatActivity(), INavHolder {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.example_multi_nav_activity)
 
-        labyrinth = Labyrinth.Builder(
+        labyrinth = Builder(
             viewModelStoreOwner = this,
             lifecycleOwner = this,
             fragmentManager = supportFragmentManager,
@@ -182,6 +182,15 @@ class ExampleMultiNavActivity : AppCompatActivity(), INavHolder {
 ```    
 
 ```kotlin
+ /*
+  *
+  *  Note: using a fragment that does not extend NavFragment will also work
+  *  but then you wont have the onVisible() callback since the fragment view wont be retained
+  *  i.e it will behave same as setting shouldSaveState = false
+  *  where the view will be created each time
+  *  (but of course you will still have the multi stack behaviour as expected)
+  * 
+  */
 class About1 : NavFragment() {   
     /*
     *   open val shouldSaveState = false

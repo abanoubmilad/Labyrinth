@@ -11,7 +11,6 @@ import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import org.abanoubmilad.labyrinth.executeIfAdded
 
 
 class LabyrinthSingle(private val builder: Builder) : INav {

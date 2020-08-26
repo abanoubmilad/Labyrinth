@@ -10,13 +10,14 @@ package org.abanoubmilad.labyrinth.demo
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import org.abanoubmilad.labyrinth.demo.tab2.Register
-import org.abanoubmilad.labyrinth.demo.tab0.Welcome
-import org.abanoubmilad.labyrinth.demo.tab1.Leaderboard
+import kotlinx.android.synthetic.main.example_multi_nav_activity.*
+import org.abanoubmilad.labyrinth.Builder
 import org.abanoubmilad.labyrinth.INavHolder
 import org.abanoubmilad.labyrinth.Labyrinth
-import kotlinx.android.synthetic.main.example_multi_nav_activity.*
 import org.abanoubmilad.labyrinth.R
+import org.abanoubmilad.labyrinth.demo.tab0.Welcome
+import org.abanoubmilad.labyrinth.demo.tab1.Leaderboard
+import org.abanoubmilad.labyrinth.demo.tab2.Register
 
 class ExampleMultiNavActivity : AppCompatActivity(), INavHolder {
 
@@ -27,7 +28,7 @@ class ExampleMultiNavActivity : AppCompatActivity(), INavHolder {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.example_multi_nav_activity)
 
-        labyrinth = Labyrinth.Builder(
+        labyrinth = Builder(
             viewModelStoreOwner = this,
             lifecycleOwner = this,
             fragmentManager = supportFragmentManager,

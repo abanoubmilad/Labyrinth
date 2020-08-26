@@ -11,10 +11,9 @@ package org.abanoubmilad.labyrinth
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import org.abanoubmilad.labyrinth.labyrinth.SingleLiveEvent
 import kotlin.math.min
 
-class MultiStacksViewModel : ViewModel() {
+class LabyrinthViewModel : ViewModel() {
 
     private val _stackChanged =
         SingleLiveEvent<Fragment>()
@@ -33,19 +32,12 @@ class MultiStacksViewModel : ViewModel() {
         SingleLiveEvent<Int>()
     val nonNavTabSelected: LiveData<Int> = _nonNavTabSelected
 
-    var menuItemIdToRootTabFragmentIndexMap: HashMap<Int, Int> = hashMapOf()
-        private set
-
     var fragmentStacks = mutableListOf<MutableList<Fragment>>()
         private set
-
-    var resetOnSameTabClickEnabled = false
 
     var selectedTabIndex = 0
         private set
 
-    var tabHistoryEnabled = false
-        private set
     var tabsHistory = UniqueStack()
         private set
 
@@ -63,20 +55,20 @@ class MultiStacksViewModel : ViewModel() {
     val isCurrentFragmentRoot
         get() = fragmentStacks[selectedTabIndex].size == 1
 
-    fun init(builder: Labyrinth.Builder) {
+    private lateinit var builder: ILabyrinthConfig
+
+    fun init(builder: ILabyrinthConfig) {
         if (hasSavedState) {
             _selectedMenuId.value = getMenuItemIdOfIndex(selectedTabIndex)
             _stackChanged.value = currentFragment
             return
         }
+        this.builder = builder
 
         fragmentStacks.clear()
         builder.rootTabFragmentsInitializer.forEach { fragmentStacks.add(mutableListOf(it())) }
 
         selectedTabIndex = builder.defaultSelectedTabIndex
-        tabHistoryEnabled = builder.tabHistoryEnabled
-        menuItemIdToRootTabFragmentIndexMap = builder.menuItemIdToRootTabFragmentIndexMap
-        resetOnSameTabClickEnabled = builder.resetOnSameTabClickEnabled
 
         tabsHistory.clear()
 
@@ -141,7 +133,7 @@ class MultiStacksViewModel : ViewModel() {
     fun onBackPressed(): Boolean {
         return if (isCurrentFragmentRoot) {
             when {
-                !tabHistoryEnabled || tabsHistory.getSize() < 2 -> true
+                !builder.tabHistoryEnabled || tabsHistory.getSize() < 2 -> true
                 else -> {
                     tabsHistory.pop()
                     tabsHistory.pop()?.let {
@@ -173,7 +165,7 @@ class MultiStacksViewModel : ViewModel() {
 
     private fun onNavTabClick(index: Int) {
         if (index == selectedTabIndex) {
-            dismiss(clearAllTop = resetOnSameTabClickEnabled)
+            dismiss(clearAllTop = builder.resetOnSameTabClickEnabled)
         } else {
             selectTab(index)
             _navTabSelected.value = index
@@ -181,7 +173,7 @@ class MultiStacksViewModel : ViewModel() {
     }
 
     fun onMenuItemSelected(menuItemId: Int): Boolean {
-        val targetIndex = menuItemIdToRootTabFragmentIndexMap[menuItemId]
+        val targetIndex = builder.menuItemIdToRootTabFragmentIndexMap[menuItemId]
         return if (targetIndex != null) {
             onNavTabClick(targetIndex)
             true
@@ -192,7 +184,7 @@ class MultiStacksViewModel : ViewModel() {
     }
 
     private fun getMenuItemIdOfIndex(index: Int): Int? {
-        return menuItemIdToRootTabFragmentIndexMap.filterValues { it == index }
+        return builder.menuItemIdToRootTabFragmentIndexMap.filterValues { it == index }
             .keys.firstOrNull()
     }
 

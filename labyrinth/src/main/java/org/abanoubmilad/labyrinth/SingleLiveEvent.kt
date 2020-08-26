@@ -6,7 +6,7 @@
  *
  */
 
-package org.abanoubmilad.labyrinth.labyrinth
+package org.abanoubmilad.labyrinth
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LifecycleOwner

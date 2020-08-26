@@ -10,5 +10,5 @@ package org.abanoubmilad.labyrinth
 
 interface INavHolder {
 
-    abstract fun getINav(): INav
+    fun getINav(): INav
 }
