@@ -17,5 +17,6 @@
         </activity>
         <activity android:name="org.abanoubmilad.labyrinth.demo.ExampleMultiNavActivity" />
         <activity android:name="org.abanoubmilad.labyrinth.demo.ExampleNavActivity" />
+        <activity android:name=".demo.UITestMultiNavActivity" />
     </application>
 </manifest>
