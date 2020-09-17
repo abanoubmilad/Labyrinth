@@ -15,12 +15,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
-import org.abanoubmilad.labyrinth.demo.BaseFragment
+import kotlinx.android.synthetic.main.fragment_leaderboard.*
+import org.abanoubmilad.labyrinth.INavHolder
 import org.abanoubmilad.labyrinth.R
+import org.abanoubmilad.labyrinth.demo.BaseFragment
 import org.abanoubmilad.labyrinth.demo.activity
 import org.abanoubmilad.labyrinth.demo.showSnackbar
-import org.abanoubmilad.labyrinth.INavHolder
-import kotlinx.android.synthetic.main.fragment_leaderboard.*
 
 /**
  * Shows a static leaderboard with multiple users.
@@ -88,7 +88,7 @@ class MyAdapter(private val myDataset: Array<String>) :
             val bundle = bundleOf(USERNAME_KEY to myDataset[position])
 
             (holder.item.context.activity() as? INavHolder)?.let {
-                it?.getINav()?.navigate(UserProfile(), bundle)
+                it.getINav().navigate(UserProfile(), bundle)
             }
         }
     }

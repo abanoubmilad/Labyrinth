@@ -1,5 +1,6 @@
 package org.abanoubmilad.labyrinth
 
+import android.os.Bundle
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.Fragment
 import org.abanoubmilad.labyrinth.demo.tab0.About1
@@ -8,12 +9,9 @@ import org.abanoubmilad.labyrinth.demo.tab0.About3
 import org.abanoubmilad.labyrinth.demo.tab0.Welcome
 import org.abanoubmilad.labyrinth.demo.tab1.Leaderboard
 import org.abanoubmilad.labyrinth.demo.tab2.Register
-import org.junit.After
+import org.junit.*
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
 import kotlin.random.Random
 
 
@@ -22,7 +20,7 @@ open class LabyrinthVMUnitTest {
     @get:Rule
     val rule = InstantTaskExecutorRule()
 
-    private lateinit var viewModel: LabyrinthViewModel
+    lateinit var viewModel: LabyrinthViewModel
     lateinit var iLabyrinthConfig: ILabyrinthConfig
 
     @Before
@@ -64,6 +62,116 @@ open class LabyrinthVMUnitTest {
     @Test(expected = IllegalArgumentException::class)
     fun selectTab_outOfBounds_greaterThanNumberOfTabs_isCorrect() {
         viewModel.selectTab(iLabyrinthConfig.rootTabFragmentsInitializer.size)
+    }
+
+
+    @Test
+    fun maintain_bundle_when_switching_tabs_isCorrect() {
+        viewModel.selectTab(0)
+
+        val fragmentAbout1 = About1()
+        val fragmentAbout1Bundle = Bundle()
+        fragmentAbout1.arguments = fragmentAbout1Bundle
+
+        viewModel.push(fragmentAbout1)
+
+
+        val fragmentAbout2 = About2()
+        val fragmentAbout2Bundle = Bundle()
+        fragmentAbout2.arguments = fragmentAbout2Bundle
+
+        viewModel.push(fragmentAbout2)
+
+
+        val fragmentWelcome = Welcome()
+        val fragmentWelcomeBundle = Bundle()
+        fragmentWelcome.arguments = fragmentWelcomeBundle
+
+        viewModel.selectTab(1, fragmentToPush = fragmentWelcome)
+
+        viewModel.selectTab(0)
+
+        if (iLabyrinthConfig.retainNonActiveTabFragmentsEnabled) {
+            assertSame(fragmentAbout2, viewModel.currentFragment)
+        } else {
+            assertSame(fragmentAbout2::class.java, viewModel.currentFragment::class.java)
+        }
+
+        assertSame(
+            fragmentAbout2Bundle,
+            viewModel.currentFragment.arguments
+        )
+        Assert.assertNotSame(
+            fragmentAbout1Bundle,
+            viewModel.currentFragment.arguments
+        )
+        Assert.assertNotSame(
+            fragmentWelcomeBundle,
+            viewModel.currentFragment.arguments
+        )
+
+        viewModel.dismiss(clearAllTop = false)
+
+        if (iLabyrinthConfig.retainNonActiveTabFragmentsEnabled) {
+            assertSame(fragmentAbout1, viewModel.currentFragment)
+        } else {
+            assertSame(fragmentAbout1::class.java, viewModel.currentFragment::class.java)
+        }
+
+        assertSame(
+            fragmentAbout1Bundle,
+            viewModel.currentFragment.arguments
+        )
+        Assert.assertNotSame(
+            fragmentAbout2Bundle,
+            viewModel.currentFragment.arguments
+        )
+        Assert.assertNotSame(
+            fragmentWelcomeBundle,
+            viewModel.currentFragment.arguments
+        )
+
+        viewModel.selectTab(1)
+
+        if (iLabyrinthConfig.retainNonActiveTabFragmentsEnabled) {
+            assertSame(fragmentWelcome, viewModel.currentFragment)
+        } else {
+            assertSame(fragmentWelcome::class.java, viewModel.currentFragment::class.java)
+        }
+
+        Assert.assertNotSame(
+            fragmentAbout2Bundle,
+            viewModel.currentFragment.arguments
+        )
+        Assert.assertNotSame(
+            fragmentAbout1Bundle,
+            viewModel.currentFragment.arguments
+        )
+        assertSame(
+            fragmentWelcomeBundle,
+            viewModel.currentFragment.arguments
+        )
+
+        viewModel.selectTab(0)
+
+        if (iLabyrinthConfig.retainNonActiveTabFragmentsEnabled) {
+            assertSame(fragmentAbout1, viewModel.currentFragment)
+        } else {
+            assertSame(fragmentAbout1::class.java, viewModel.currentFragment::class.java)
+        }
+
+        assertSame(
+            fragmentAbout1Bundle,
+            viewModel.currentFragment.arguments
+        )
+        Assert.assertNotSame(
+            fragmentAbout2Bundle,
+            viewModel.currentFragment.arguments
+        )
+        Assert.assertNotSame(
+            fragmentWelcomeBundle,
+            viewModel.currentFragment.arguments
+        )
     }
 
     @Test
@@ -235,7 +343,6 @@ open class LabyrinthVMUnitTest {
 
         assertSame(fragmentAbout1, viewModel.currentFragment)
     }
-
 
     @Test
     fun navigateAndPush_isCorrect() {
