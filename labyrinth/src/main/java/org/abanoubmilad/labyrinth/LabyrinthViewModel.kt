@@ -32,7 +32,7 @@ class LabyrinthViewModel : ViewModel() {
         SingleLiveEvent<Int>()
     val nonNavTabSelected: LiveData<Int> = _nonNavTabSelected
 
-    var fragmentStacks = mutableListOf<MutableList<Fragment>>()
+    var fragmentStacks = mutableListOf<MutableList<FragmentWrapper<*>>>()
         private set
 
     var selectedTabIndex = 0
@@ -44,12 +44,12 @@ class LabyrinthViewModel : ViewModel() {
     var hasSavedState = false
         private set
 
-    val currentStack
+    private val currentStack
         get() = fragmentStacks[selectedTabIndex]
 
 
     val currentFragment
-        get() = fragmentStacks[selectedTabIndex].last()
+        get() = fragmentStacks[selectedTabIndex].last().fetchFragment()
 
 
     val isCurrentFragmentRoot
@@ -66,7 +66,13 @@ class LabyrinthViewModel : ViewModel() {
         this.builder = builder
 
         fragmentStacks.clear()
-        builder.rootTabFragmentsInitializer.forEach { fragmentStacks.add(mutableListOf(it())) }
+        builder.rootTabFragmentsInitializer.forEachIndexed { index, function ->
+            if (index == builder.defaultSelectedTabIndex) {
+                fragmentStacks.add(mutableListOf(FragmentWrapper(function.invoke())))
+            } else {
+                fragmentStacks.add(mutableListOf())
+            }
+        }
 
         selectedTabIndex = builder.defaultSelectedTabIndex
 
@@ -89,7 +95,21 @@ class LabyrinthViewModel : ViewModel() {
         )
             return
 
+        if (selectedTabIndex != index
+            && !builder.retainNonActiveTabFragmentsEnabled
+        ) {
+            currentStack.forEach { it.clearRetainedFragment() }
+        }
+
         selectedTabIndex = index
+
+        if (currentStack.size == 0) {
+            currentStack.add(
+                FragmentWrapper(
+                    builder.rootTabFragmentsInitializer[selectedTabIndex].invoke()
+                )
+            )
+        }
 
         if (clearAllTop) {
             while (currentStack.size > 1)
@@ -97,7 +117,7 @@ class LabyrinthViewModel : ViewModel() {
         }
 
         fragmentToPush?.let {
-            currentStack.add(it)
+            currentStack.add(FragmentWrapper(it))
         }
 
         _selectedMenuId.value = getMenuItemIdOfIndex(index)
@@ -108,7 +128,7 @@ class LabyrinthViewModel : ViewModel() {
     }
 
     fun push(fragment: Fragment) {
-        currentStack.add(fragment)
+        currentStack.add(FragmentWrapper(fragment))
         _stackChanged.value = currentFragment
     }
 
@@ -152,7 +172,7 @@ class LabyrinthViewModel : ViewModel() {
         if (!isCurrentFragmentRoot) {
             currentStack.removeAt(currentStack.size - 1)
         }
-        currentStack.add(fragment)
+        currentStack.add(FragmentWrapper(fragment))
         _stackChanged.value = currentFragment
     }
 

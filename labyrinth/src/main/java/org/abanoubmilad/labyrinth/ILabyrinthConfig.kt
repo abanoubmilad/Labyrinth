@@ -11,6 +11,7 @@ interface ILabyrinthConfig {
 
     var resetOnSameTabClickEnabled: Boolean
     var saveStateEnabled: Boolean
+    var retainNonActiveTabFragmentsEnabled: Boolean
     var tabHistoryEnabled: Boolean
 
 }

@@ -21,7 +21,10 @@ class Builder(
     override var defaultSelectedTabIndex: Int = 0
 
     override var resetOnSameTabClickEnabled: Boolean = true
+
     override var saveStateEnabled: Boolean = false
+    override var retainNonActiveTabFragmentsEnabled: Boolean = false
+
     override var tabHistoryEnabled: Boolean = true
 
     var onNavTabSelected: ((menItemId: Int) -> Unit)? = null
