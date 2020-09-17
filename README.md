@@ -46,7 +46,7 @@ Add to app level `build.gradle`
 ```Groovy
     dependencies {
 
-        implementation 'com.github.abanoubmilad:labyrinth:0.2'
+        implementation 'com.github.abanoubmilad:labyrinth:0.3'
         
     }
 ```
@@ -126,11 +126,30 @@ class ExampleMultiNavActivity : AppCompatActivity(), INavHolder {
             resetOnSameTabClickEnabled = true
         
         /*
-        *   if enabled, fragments will survive any configuration change
+        *   if enabled, the fragments will survive any configuration change
+        *   i.e fragments will be maintained even if activity is recreated
         *   this functionality is achieve using a view model
         */
             saveStateEnabled  = false
-            
+        
+        /*
+        *   fragments pushed into current tab
+        *   will be retained as long as their current tab is the selected one (active tab)
+        * 
+        *   when tab is switched you can choose to keep the non active stack fragments in memory
+        *   so that when you switch back you will get the same instances
+        *   OR destroy the non active stack fragments and recreate them (with same bundle) when their tab is selected again
+        * 
+        *   if enabled, non active tab (any tab that is not selected) fragments will be retained in memory
+        *   if disabled, non active tab fragments will be destroyed and recreated 
+        *   with their previous bundle when the tab is selected again
+        *   
+        *   For better performance it's suggested to keep this disabled
+        *   so fragments of other tab can be destroyed and release memory resources
+        * 
+        */
+            retainNonActiveTabFragmentsEnabled = false
+    
         /*
         *   if enabled, tabs history will be maintained
         */
