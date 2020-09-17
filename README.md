@@ -1,3 +1,6 @@
+[![](https://jitpack.io/v/abanoubmilad/labyrinth.svg)](https://jitpack.io/#abanoubmilad/labyrinth)
+
+
 Labyrinth
 =========
 
