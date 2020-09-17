@@ -10,12 +10,16 @@ class FragmentWrapper<T : Fragment>(
 ) {
     constructor(fragment: T) : this(fragment.javaClass, fragment.arguments, fragment)
 
-    fun fetchFragment(): T? {
-        if (fragment == null) {
-            fragment = fragmentClass.newInstance()
-            fragment?.arguments = bundle
+    fun fetchFragment(): T {
+        fragment?.let {
+            return it
         }
-        return fragment
+
+        val created = fragmentClass.newInstance()
+        created.arguments = bundle
+        fragment = created
+
+        return created
     }
 
     fun clearRetainedFragment() {

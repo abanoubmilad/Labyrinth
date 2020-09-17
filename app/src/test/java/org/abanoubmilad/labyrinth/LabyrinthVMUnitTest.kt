@@ -17,15 +17,20 @@ import org.junit.Test
 import kotlin.random.Random
 
 
-class LabyrinthViewModelUnitTest {
+open class LabyrinthVMUnitTest {
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
 
     private lateinit var viewModel: LabyrinthViewModel
-    private lateinit var iLabyrinthConfig: ILabyrinthConfig
+    lateinit var iLabyrinthConfig: ILabyrinthConfig
+
+    fun log(msg: String) {
+        println("Logger:  $msg")
+    }
+
     @Before
-    fun setUp() {
+    open fun setUp() {
         viewModel = LabyrinthViewModel()
         iLabyrinthConfig = object : ILabyrinthConfig {
             override val rootTabFragmentsInitializer: List<() -> Fragment> = listOf(
@@ -42,6 +47,7 @@ class LabyrinthViewModelUnitTest {
             override var defaultSelectedTabIndex: Int = 1
             override var resetOnSameTabClickEnabled: Boolean = true
             override var saveStateEnabled: Boolean = true
+            override var retainNonActiveTabFragmentsEnabled = false
             override var tabHistoryEnabled: Boolean = true
 
         }
@@ -245,10 +251,20 @@ class LabyrinthViewModelUnitTest {
         viewModel.selectTab(1, clearAllTop = false, fragmentToPush = fragmentWelcome)
 
         assertSame(fragmentWelcome, viewModel.currentFragment)
+
         viewModel.selectTab(0)
-        assertSame(fragmentAbout1, viewModel.currentFragment)
+        if (iLabyrinthConfig.retainNonActiveTabFragmentsEnabled) {
+            assertSame(fragmentAbout1, viewModel.currentFragment)
+        } else {
+            assertSame(fragmentAbout1::class.java, viewModel.currentFragment::class.java)
+        }
+
         viewModel.selectTab(1)
-        assertSame(fragmentWelcome, viewModel.currentFragment)
+        if (iLabyrinthConfig.retainNonActiveTabFragmentsEnabled) {
+            assertSame(fragmentWelcome, viewModel.currentFragment)
+        } else {
+            assertSame(fragmentWelcome::class.java, viewModel.currentFragment::class.java)
+        }
     }
 
     @Test
