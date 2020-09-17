@@ -25,10 +25,6 @@ open class LabyrinthVMUnitTest {
     private lateinit var viewModel: LabyrinthViewModel
     lateinit var iLabyrinthConfig: ILabyrinthConfig
 
-    fun log(msg: String) {
-        println("Logger:  $msg")
-    }
-
     @Before
     open fun setUp() {
         viewModel = LabyrinthViewModel()
