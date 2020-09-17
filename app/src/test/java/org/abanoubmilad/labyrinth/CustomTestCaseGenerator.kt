@@ -27,19 +27,18 @@ fun main(args: Array<String>) {
 
                     tabHistoryEnabledList.forEach { tabHistoryEnabled ->
                         itr++
-                        File(getCustomTestCasesPath() + "/LabyrinthVMUnitTest$itr.kt").printWriter()
+                        val name = "LabyrinthVMUnitTest$itr"
+                        File(getCustomTestCasesPath() + "/$name.kt").printWriter()
                             .use { out ->
                                 out.println(
-                                    "package org.abanoubmilad.labyrinth.customTests" +
-                                            "\n import org.abanoubmilad.labyrinth.LabyrinthVMUnitTest" +
-                                            "\n import org.junit.Before" +
-                                            "\n open class LabyrinthVMUnitTest$itr: LabyrinthVMUnitTest() {@Before override fun setUp() {super.setUp() " +
-                                            "\n iLabyrinthConfig.defaultSelectedTabIndex = $defaultSelectedTabIndex" +
-                                            "\n iLabyrinthConfig.resetOnSameTabClickEnabled = $resetOnSameTabClickEnabled" +
-                                            "\n iLabyrinthConfig.saveStateEnabled = $saveStateEnabled" +
-                                            "\n iLabyrinthConfig.retainNonActiveTabFragmentsEnabled = $retainNonActiveTabFragmentsEnabled" +
-                                            "\n iLabyrinthConfig.tabHistoryEnabled = $tabHistoryEnabled" +
-                                            " }}"
+                                    generateCustomTest(
+                                        defaultSelectedTabIndex,
+                                        resetOnSameTabClickEnabled,
+                                        saveStateEnabled,
+                                        retainNonActiveTabFragmentsEnabled,
+                                        tabHistoryEnabled,
+                                        name
+                                    )
                                 )
 
                             }
