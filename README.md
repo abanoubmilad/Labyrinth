@@ -49,7 +49,7 @@ Add to app level `build.gradle`
 ```Groovy
     dependencies {
 
-        implementation 'com.github.abanoubmilad:labyrinth:0.3'
+        implementation 'com.github.abanoubmilad:labyrinth:0.4'
         
     }
 ```

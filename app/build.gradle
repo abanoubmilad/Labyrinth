@@ -58,5 +58,8 @@ dependencies {
     // Optional -- UI testing with UI Automator
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 
+    // Robolectric
+    testImplementation "org.robolectric:robolectric:3.3.2"
+
     implementation project(':labyrinth')
 }
