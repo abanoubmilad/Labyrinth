@@ -9,13 +9,14 @@
 package org.abanoubmilad.labyrinth.demo
 
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
-import org.abanoubmilad.labyrinth.demo.tab0.About1
+import androidx.appcompat.app.AppCompatActivity
+import org.abanoubmilad.labyrinth.BuilderSingle
 import org.abanoubmilad.labyrinth.INavHolder
 import org.abanoubmilad.labyrinth.LabyrinthSingle
 import org.abanoubmilad.labyrinth.R
+import org.abanoubmilad.labyrinth.demo.tab0.About1
 
-class ExampleNavActivity : FragmentActivity(), INavHolder {
+class ExampleSingleNavActivity : AppCompatActivity(), INavHolder {
 
     lateinit var labyrinth: LabyrinthSingle
     override fun getINav() = labyrinth
@@ -24,11 +25,18 @@ class ExampleNavActivity : FragmentActivity(), INavHolder {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.example_single_nav_activity)
 
-        labyrinth = LabyrinthSingle.Builder(
+        labyrinth = BuilderSingle(
+            viewModelStoreOwner = this,
+            lifecycleOwner = this,
             fragmentManager = supportFragmentManager,
 
             fragmentContainerId = R.id.nav_host_container
-        ).build()
+        ).apply {
+
+            saveStateEnabled = true
+            retainNonActiveFragmentsEnabled = false
+
+        }.build()
 
         labyrinth.navigate(About1())
     }

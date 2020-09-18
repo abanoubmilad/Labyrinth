@@ -8,69 +8,81 @@
 package org.abanoubmilad.labyrinth
 
 import android.os.Bundle
-import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
 
 
-class LabyrinthSingle(private val builder: Builder) : INav {
+class LabyrinthSingle(private val builder: BuilderSingle) : INav {
 
-    class Builder(
-        val fragmentManager: FragmentManager,
-        @IdRes val fragmentContainerId: Int
-    ) {
-        fun build() = LabyrinthSingle(this)
-    }
-
+    private var isTransactionExecuting = false
 
     init {
-        builder.fragmentManager.addOnBackStackChangedListener {
-            getCurrentFragment()?.executeIfAdded {
+
+        builder.viewModel.stackChanged.observe(builder.lifecycleOwner, Observer { stackTop ->
+            commitFragment(stackTop)
+            stackTop.executeIfAdded {
                 (it as? NavFragment)?.onVisibleInternal()
             }
-        }
+
+        })
+
+        builder.viewModel.init(builder)
     }
 
     fun shouldCallSuperOnBackPressed(): Boolean {
-        return if (builder.fragmentManager.backStackEntryCount > 0) {
-            dismiss()
-            false
-        } else {
-            true
+        return builder.viewModel.onBackPressed()
+    }
+
+    private fun commitFragment(fragment: Fragment) {
+        val transaction = builder.fragmentManager.beginTransaction()
+
+        builder.fragmentManager.fragments.forEach { transaction.remove(it) }
+
+        transaction.add(builder.fragmentContainerId, fragment)
+        transaction.commit()
+
+        executePendingTransactions()
+
+    }
+
+    private fun executePendingTransactions() {
+        if (!isTransactionExecuting) {
+            isTransactionExecuting = true
+            builder.fragmentManager.executePendingTransactions()
+            isTransactionExecuting = false
         }
     }
+
+
+    /*
+    *
+    *
+    *
+    *
+    *
+    *                   INav implementation
+    *
+    *
+    *
+    *
+    *
+    * */
 
 
     override fun dismiss(clearAllTop: Boolean) {
-        var count = builder.fragmentManager.backStackEntryCount
-        if (clearAllTop) {
-            while (count > 0) {
-                count--
-                builder.fragmentManager.popBackStack()
-            }
-        } else if (count > 1) {
-            builder.fragmentManager.popBackStack()
-        }
+        builder.viewModel.dismiss(clearAllTop)
     }
 
     override fun dismissThenNavigate(fragment: Fragment, bundle: Bundle?) {
-        if (builder.fragmentManager.backStackEntryCount > 0) {
-            builder.fragmentManager.popBackStack()
-        }
-        navigate(fragment, bundle)
+        if (bundle != null)
+            fragment.arguments = bundle
+        builder.viewModel.popThenPush(fragment)
     }
-
-    override fun getCurrentFragment(): Fragment? {
-        return builder.fragmentManager.fragments.lastOrNull()
-    }
-
 
     override fun navigate(fragment: Fragment, bundle: Bundle?) {
         if (bundle != null)
             fragment.arguments = bundle
-        builder.fragmentManager
-            .beginTransaction().addToBackStack(null)
-            .replace(builder.fragmentContainerId, fragment).commitAllowingStateLoss()
+        builder.viewModel.push(fragment)
     }
 
     override fun navigate(
@@ -79,10 +91,9 @@ class LabyrinthSingle(private val builder: Builder) : INav {
         fragmentToPush: Fragment?,
         bundle: Bundle?
     ) {
-        fragmentToPush?.let {
-            navigate(fragmentToPush, bundle)
-        }
+
     }
 
 
+    override fun getCurrentFragment() = builder.viewModel.currentFragment
 }

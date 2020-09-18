@@ -147,7 +147,7 @@ class ExampleMultiNavActivity : AppCompatActivity(), INavHolder {
         *   if disabled, non active tab fragments will be destroyed and recreated 
         *   with their previous bundle when the tab is selected again
         *   
-        *   For better performance it's suggested to keep this disabled
+        *   For better performance it's suggested to keep this disabled (false)
         *   so fragments of other tab can be destroyed and release memory resources
         * 
         */
@@ -299,4 +299,50 @@ class About1 : NavFragment() {
         }
 
 }
+```
+
+
+```kotlin
+class ExampleSingleNavActivity : AppCompatActivity(), INavHolder {
+
+    lateinit var labyrinth: LabyrinthSingle
+    override fun getINav() = labyrinth
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.example_single_nav_activity)
+
+        labyrinth = BuilderSingle(
+            viewModelStoreOwner = this,
+            lifecycleOwner = this,
+            fragmentManager = supportFragmentManager,
+
+            fragmentContainerId = R.id.nav_host_container
+        ).apply {
+
+            saveStateEnabled = true
+        /*   
+        *
+        *   if enabled, bottom stack fragments will be retained in memory
+        *   if disabled, bottom stack fragments will be destroyed and recreated 
+        *   with their previous bundle when they become at top of stack again
+        * 
+        *   For better performance it's suggested to keep this disabled (false)
+        *   so fragments of bottom stack can be destroyed and release memory resources
+        * 
+        */
+            retainNonActiveFragmentsEnabled = false
+
+        }.build()
+
+        labyrinth.navigate(About1())
+    }
+
+
+    override fun onBackPressed() {
+        if (labyrinth.shouldCallSuperOnBackPressed())
+            super.onBackPressed()
+    }
+}
+
 ```

@@ -39,7 +39,7 @@ open class LabyrinthVMUnitTest {
                     R.id.form to 2
                 )
             override var defaultSelectedTabIndex: Int = 1
-            override var resetOnSameTabClickEnabled: Boolean = true
+            override var resetOnSameTabClickEnabled: Boolean = false
             override var saveStateEnabled: Boolean = true
             override var retainNonActiveTabFragmentsEnabled = false
             override var tabHistoryEnabled: Boolean = true

@@ -24,7 +24,7 @@ class StartActivity : AppCompatActivity() {
             startActivity(Intent(this, ExampleMultiNavActivity::class.java))
         }
         nav.setOnClickListener {
-            startActivity(Intent(this, ExampleNavActivity::class.java))
+            startActivity(Intent(this, ExampleSingleNavActivity::class.java))
         }
     }
 
